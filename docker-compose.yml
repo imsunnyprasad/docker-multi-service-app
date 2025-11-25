@@ -1,0 +1,45 @@
+version: '3.8'
+
+services:
+  # 1. The Frontend Web Server (Nginx)
+  web:
+    image: nginx:latest
+    ports:
+      - "80:80" # Map port 80 on the host to port 80 in the container
+    volumes:
+      - ./index.html:/usr/share/nginx/html/index.html:ro
+    networks:
+      - app_network
+    restart: always # Always restart if it fails
+
+  # 2. The Custom API Backend (Node.js)
+  api:
+    build: . # Tells Docker to use the local Dockerfile
+    ports:
+      - "300:3000" # Map port 3000 on the host to port 3000 in the container
+    networks:
+      - app_network
+    depends_on:
+      - redis # Ensures redis starts before the api (though connection retries are still needed in the app code)
+    restart: always
+
+  # 3. The Caching/Storage Service (Redis)
+  redis:
+    image: redis:6.2-alpine
+    ports:
+      - "6379:6379" # Expose if needed for debugging/external access
+    volumes:
+      # Named volume to persist data across restarts
+      - redis_data:/data 
+    networks:
+      - app_network
+    restart: always
+
+# Define the network so services can talk to each other by name (e.g., 'redis')
+networks:
+  app_network:
+    driver: bridge
+
+# Define the named volume for Redis persistence
+volumes:
+  redis_data:

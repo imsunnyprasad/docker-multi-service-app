@@ -1,0 +1,36 @@
+## Docker Project Files ##
+# Ignore any dynamically created volume mount directories
+# (e.g., if you created a folder named 'redis_data')
+redis_data/
+
+# Ignore local environment variables (SECURITY RISK if committed!)
+.env
+
+## Operating System and Editor Files ##
+# Linux/macOS
+.DS_Store
+*~
+.idea/ # Common IDE folder (e.g., IntelliJ)
+.vscode/ # VS Code settings
+
+## Node.js Specific Files (for the 'api' service) ##
+# Node package manager dirs
+node_modules/
+npm-debug.log
+yarn-error.log
+
+# Build/runtime output
+dist/
+build/
+*.log
+
+## Docker Specific ##
+# Ignore dynamically created image files if they are generated locally
+# You typically commit the Dockerfile, but ignore these output files:
+.dockerignore # Although you should commit this, some tools generate it
+*.tar # Ignore exported images
+
+## AWS/EC2 Specific ##
+# Ignore SSH Keys or credentials if they were accidentally saved here
+# (Highly critical: NEVER commit private keys!)
+*.pem
