@@ -11,8 +11,8 @@ This project showcases the following practical Docker competencies:
 * **Docker Compose:** Defining, networking, and orchestrating multiple interdependent services (`web`, `api`, `redis`) using a single `docker-compose.yml` file.
 * **Multi-Stage Builds:** Utilizing an optimized `Dockerfile` for the custom `api` service to create a small, efficient production image by separating the build environment (installing Node.js dependencies) from the final runtime environment.
 * **Internal Networking:** Services communicate securely using their service names as hostnames (e.g., the `api` container connects to the `redis` container using `redis:6379`).
-* **Volume Mapping:** Defining a named volume (`redis_data`) to persist data for the Redis container, ensuring that the hit counter data survives container restarts (`volumes` key).
-* **Port Mapping:** Exposing specific service ports from the container to the host machine (e.g., mapping port 300 on the host to port 3000 inside the API container).
+* **Volume Mapping:** Defining a named volume (`redis_data`) to persist data for the Redis container, ensuring that the hit counter data survives container restarts.
+* **Port Mapping:** Exposing specific service ports from the container to the host machine (e.g., mapping port **300** on the host to port 3000 inside the API container).
 
 ---
 
@@ -28,11 +28,27 @@ This application runs three containerized services:
 
 ---
 
+## 📸 Project Verification Screenshots
+
+The following screenshots confirm the application is running and the services are communicating correctly.
+
+### 🌐 Frontend Web Service
+
+This confirms the static content is served correctly via **port 80**.
+![Web Service Screenshot](images/web-screenshot.png)
+
+### 💻 API and Redis Counter
+
+This demonstrates the successful connection between the API (host port **300**) and Redis (internal network), with the counter incrementing on each refresh.
+![API Status JSON Output](images/api-status.png)
+
+---
+
 ## 🚀 Setup and Running the Application
 
 ### Prerequisites
 
-You must have **Docker Engine** and **Docker Compose** installed on your host machine (e.g., AWS EC2).
+You must have **Docker Engine** and **Docker Compose** installed on your host machine.
 
 ### Instructions
 
@@ -51,19 +67,17 @@ You must have **Docker Engine** and **Docker Compose** installed on your host ma
     docker compose up --build -d
     ```
 
-3.  **Verify Functionality:**
-
-    Use your EC2 instance's Public IP address (`54.234.49.78`) to verify the connections:
+3.  **Verify Functionality (using `localhost` or your EC2 Public IP):**
 
     * **Frontend (Web Service):** Check the static HTML page:
-        `http://54.234.49.78/`
+        `http://localhost/` or `http://[Your-IP]/`
 
-    * **API & Redis (Counter Check):** Visit the API endpoint. **Refresh this page multiple times** to verify that the `Total Hits` value increments, confirming the `api` service is successfully communicating with the `redis` container over the Docker network.
-        `http://54.234.49.78:300/api/status`
+    * **API & Redis (Counter Check):** Visit the API endpoint and **refresh the page** to verify that the `Total Hits` value increments:
+        `http://localhost:300/api/status` or `http://[Your-IP]:300/api/status`
 
 4.  **Stop and Clean Up:**
 
-    To gracefully stop and remove all containers, networks, and anonymous volumes created by Compose:
+    To gracefully stop and remove all containers, networks, and volumes:
 
     ```bash
     docker compose down
